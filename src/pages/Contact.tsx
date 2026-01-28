@@ -28,8 +28,8 @@ const contactInfo = [
   {
     icon: Phone,
     title: "اتصل بنا",
-    value: "+967 5 000 0000",
-    href: "tel:+96750000000",
+    value: "+967 773 795 665",
+    href: "tel:+967773795665",
   },
   {
     icon: Mail,

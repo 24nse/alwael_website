@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 const testimonials = [
   {
     id: 1,
-    name: "محمد العتيبي",
+    name: "أحمد باحارثة",
     role: "مستثمر عقاري",
     content:
       "تعاملت مع شركة الوعل في مشروع سكني كبير، وأذهلتني جودة العمل والالتزام بالمواعيد. فريق محترف بكل ما تعنيه الكلمة.",
@@ -14,15 +14,15 @@ const testimonials = [
   },
   {
     id: 2,
-    name: "فاطمة الشهري",
-    role: "صاحبة فيلا",
+    name: "سالم بامطرف",
+    role: "صاحب فيلا",
     content:
       "من التصميم وحتى التنفيذ، كانت تجربة مميزة. اهتموا بأدق التفاصيل وحققوا لي بيت أحلامي بالضبط كما تصورته.",
     rating: 5,
   },
   {
     id: 3,
-    name: "عبدالله القحطاني",
+    name: "عبدالله باوزير",
     role: "رجل أعمال",
     content:
       "بنوا لي مقر شركتي الجديد بجودة استثنائية. التصميم عصري والتنفيذ ممتاز. أنصح بهم بشدة لأي مشروع تجاري.",
@@ -30,10 +30,10 @@ const testimonials = [
   },
   {
     id: 4,
-    name: "نورة المطيري",
-    role: "مصممة ديكور",
+    name: "خالد الكثيري",
+    role: "مصمم ديكور",
     content:
-      "كوني مصممة، لدي معايير عالية جداً. الوعل تجاوزت توقعاتي في كل جانب من جوانب التنفيذ والتشطيب.",
+      "كوني مصمم، لدي معايير عالية جداً. الوعل تجاوزت توقعاتي في كل جانب من جوانب التنفيذ والتشطيب.",
     rating: 5,
   },
 ];
@@ -128,18 +128,17 @@ const TestimonialsSection = () => {
             >
               <ChevronRight className="w-5 h-5" />
             </Button>
-            
+
             {/* Dots */}
             <div className="flex items-center gap-2">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
-                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                    index === currentIndex
-                      ? "bg-secondary w-8"
-                      : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
-                  }`}
+                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${index === currentIndex
+                    ? "bg-secondary w-8"
+                    : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                    }`}
                 />
               ))}
             </div>

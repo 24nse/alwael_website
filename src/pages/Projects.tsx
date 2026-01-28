@@ -54,7 +54,7 @@ const projects = [
   },
   {
     id: 5,
-    title: "مجمع الرياض التجاري",
+    title: "مجمع الحديدة التجاري",
     category: "تجاري",
     location: "ابن سيناء - المكلا",
     year: "2023",

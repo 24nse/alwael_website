@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Building2, Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import { Building2, Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin, MessageCircle } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -20,6 +20,7 @@ const Footer = () => {
   ];
 
   const socialLinks = [
+    { icon: MessageCircle, href: "https://wa.me/967773795665", label: "WhatsApp" },
     { icon: Facebook, href: "#", label: "Facebook" },
     { icon: Twitter, href: "#", label: "Twitter" },
     { icon: Instagram, href: "#", label: "Instagram" },
@@ -115,7 +116,7 @@ const Footer = () => {
                 <span className="font-cairo text-primary-foreground/80">
                   ابن سيناء - المكلا، اليمن
                   <br />
-                 الشارع العام - بجانب بنك الكريمي
+                  الشارع العام - بجانب بنك الكريمي
                 </span>
               </li>
               <li className="flex items-center gap-3">
@@ -123,11 +124,11 @@ const Footer = () => {
                   <Phone className="w-5 h-5 text-secondary" />
                 </div>
                 <a
-                  href="tel:+96750000000"
+                  href="tel:+967773795665"
                   className="font-cairo text-primary-foreground/80 hover:text-secondary transition-colors"
                   dir="ltr"
                 >
-                  +967 5 000 0000
+                  +967 773 795 665
                 </a>
               </li>
               <li className="flex items-center gap-3">
