@@ -1,82 +1,23 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Layout from "@/components/layout/Layout";
-import { MapPin, Calendar, Ruler, ArrowLeft, X } from "lucide-react";
+import { MapPin, Calendar, Ruler, ArrowLeft, X, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import projectVilla from "@/assets/project-villa.jpg";
-import projectApartments from "@/assets/project-apartments.jpg";
-import projectCommercial from "@/assets/project-commercial (1).jpg";
-import projectInterior from "@/assets/project-interior.jpg";
-
-const categories = ["الكل", "سكني", "تجاري", "تصميم داخلي", "صناعي"];
-
-const projects = [
-  {
-    id: 1,
-    title: "فيلا النخيل الفاخرة",
-    category: "سكني",
-    location: "ابن سيناء - المكلا",
-    year: "2024",
-    area: "850 م²",
-    description: "فيلا فاخرة بتصميم عصري يجمع بين الأصالة والمعاصرة، تتضمن 5 غرف نوم، مسبح، وحديقة خاصة.",
-    image: projectVilla,
-  },
-  {
-    id: 2,
-    title: "مجمع الواحة السكني",
-    category: "سكني",
-    location: "ابن سيناء - المكلا",
-    year: "2023",
-    area: "15,000 م²",
-    description: "مجمع سكني يضم 48 وحدة سكنية متنوعة، مع مرافق ترفيهية ومساحات خضراء واسعة.",
-    image: projectApartments,
-  },
-  {
-    id: 3,
-    title: "برج الأعمال المركزي",
-    category: "تجاري",
-    location: "ابن سيناء - المكلا",
-    year: "2024",
-    area: "25,000 م²",
-    description: "برج مكتبي من 20 طابقاً مجهز بأحدث التقنيات الذكية ومعايير الاستدامة.",
-    image: projectCommercial,
-  },
-  {
-    id: 4,
-    title: "تصميم شقة الأفق",
-    category: "تصميم داخلي",
-    location: "ابن سيناء - المكلا",
-    year: "2024",
-    area: "280 م²",
-    description: "تصميم داخلي فاخر لشقة بنتهاوس، بأسلوب عصري يجمع بين الأناقة والراحة.",
-    image: projectInterior,
-  },
-  {
-    id: 5,
-    title: "مجمع الحديدة التجاري",
-    category: "تجاري",
-    location: "ابن سيناء - المكلا",
-    year: "2023",
-    area: "35,000 م²",
-    description: "مركز تجاري متكامل يضم محلات تجارية، مطاعم، ومناطق ترفيهية.",
-    image: projectCommercial,
-  },
-  {
-    id: 6,
-    title: "فيلا الأمير",
-    category: "سكني",
-    location: "ابن سيناء - المكلا",
-    year: "2022",
-    area: "1,200 م²",
-    description: "قصر فاخر بتصميم كلاسيكي مع لمسات عصرية، يضم 7 غرف نوم ومرافق متعددة.",
-    image: projectVilla,
-  },
-];
+import { usePublicProjects } from "@/hooks/website/usePublicProjects";
 
 const Projects = () => {
+  const { projects, loading, error } = usePublicProjects();
   const [activeCategory, setActiveCategory] = useState("الكل");
-  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
+  const [selectedProject, setSelectedProject] = useState<any>(null);
+
+  // Extract unique categories dynamically from DB data
+  const categories = useMemo(() => {
+    const cats = new Set(projects.map(p => p.category).filter(Boolean));
+    // If DB is empty, fall back to defaults
+    if (cats.size === 0) return ["الكل", "سكني", "تجاري", "تصميم داخلي"];
+    return ["الكل", ...Array.from(cats)];
+  }, [projects]);
 
   const filteredProjects =
     activeCategory === "الكل"
@@ -116,77 +57,106 @@ const Projects = () => {
       {/* Projects Gallery */}
       <section className="py-24 bg-background">
         <div className="container mx-auto px-4">
-          {/* Category Filter */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-wrap justify-center gap-3 mb-12"
-          >
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`px-6 py-2.5 rounded-full font-cairo text-sm transition-all duration-300 ${activeCategory === category
-                  ? "bg-secondary text-secondary-foreground shadow-gold"
-                  : "bg-muted text-muted-foreground hover:bg-secondary/10 hover:text-secondary"
-                  }`}
-              >
-                {category}
-              </button>
-            ))}
-          </motion.div>
 
-          {/* Projects Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project, index) => (
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+              <Loader2 className="w-10 h-10 animate-spin mb-4 text-secondary" />
+              <p className="font-cairo">جاري تحميل المشاريع...</p>
+            </div>
+          ) : error ? (
+            <div className="flex flex-col items-center justify-center py-20 text-destructive">
+              <AlertCircle className="w-10 h-10 mb-4" />
+              <p className="font-cairo text-lg font-semibold">عذراً، حدث خطأ أثناء تحميل المشاريع</p>
+              <p className="font-cairo text-sm opacity-80 mt-2">{error.message || "يرجى التحقق من الاتصال والمحاولة مرة أخرى"}</p>
+            </div>
+          ) : (
+            <>
+              {/* Category Filter */}
               <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="group cursor-pointer"
-                onClick={() => setSelectedProject(project)}
+                transition={{ duration: 0.6 }}
+                className="flex flex-wrap justify-center gap-3 mb-12"
               >
-                <div className="relative rounded-2xl overflow-hidden shadow-soft card-hover">
-                  {/* Image */}
-                  <div className="aspect-[4/3] overflow-hidden">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                  </div>
-
-                  {/* Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                  {/* Category Badge */}
-                  <div className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-secondary text-secondary-foreground text-xs font-cairo font-semibold">
-                    {project.category}
-                  </div>
-
-                  {/* Content on Hover */}
-                  <div className="absolute inset-x-0 bottom-0 p-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                    <h3 className="text-xl font-tajawal font-bold text-white mb-2">
-                      {project.title}
-                    </h3>
-                    <div className="flex items-center gap-2 text-white/80 text-sm font-cairo">
-                      <MapPin className="w-4 h-4" />
-                      {project.location}
-                    </div>
-                  </div>
-
-                  {/* Static Content */}
-                  <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-primary/70 to-transparent group-hover:opacity-0 transition-opacity duration-500">
-                    <h3 className="text-lg font-tajawal font-bold text-white">
-                      {project.title}
-                    </h3>
-                  </div>
-                </div>
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setActiveCategory(category)}
+                    className={`px-6 py-2.5 rounded-full font-cairo text-sm transition-all duration-300 ${activeCategory === category
+                      ? "bg-secondary text-secondary-foreground shadow-gold"
+                      : "bg-muted text-muted-foreground hover:bg-secondary/10 hover:text-secondary"
+                      }`}
+                  >
+                    {category}
+                  </button>
+                ))}
               </motion.div>
-            ))}
-          </div>
+
+              {/* Projects Grid */}
+              {filteredProjects.length === 0 ? (
+                <div className="text-center py-20 text-muted-foreground font-cairo">
+                  لا توجد مشاريع متاحة في هذا القسم حالياً.
+                </div>
+              ) : (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredProjects.map((project, index) => (
+                    <motion.div
+                      key={project.id}
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: index * 0.1 }}
+                      className="group cursor-pointer"
+                      onClick={() => setSelectedProject(project)}
+                    >
+                      <div className="relative rounded-2xl overflow-hidden shadow-soft card-hover h-full">
+                        {/* Image */}
+                        <div className="aspect-[4/3] overflow-hidden">
+                          {project.images.length > 0 ? (
+                            <img
+                              src={project.images[0].image_url}
+                              alt={project.title}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-muted flex items-center justify-center">
+                              <span className="text-muted-foreground font-cairo">لا توجد صورة</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                        {/* Category Badge */}
+                        <div className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-secondary text-secondary-foreground text-xs font-cairo font-semibold">
+                          {project.category}
+                        </div>
+
+                        {/* Content on Hover */}
+                        <div className="absolute inset-x-0 bottom-0 p-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                          <h3 className="text-xl font-tajawal font-bold text-white mb-2">
+                            {project.title}
+                          </h3>
+                          <div className="flex items-center gap-2 text-white/80 text-sm font-cairo">
+                            <MapPin className="w-4 h-4" />
+                            {project.location}
+                          </div>
+                        </div>
+
+                        {/* Static Content */}
+                        <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-primary/70 to-transparent group-hover:opacity-0 transition-opacity duration-500">
+                          <h3 className="text-lg font-tajawal font-bold text-white">
+                            {project.title}
+                          </h3>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+
         </div>
       </section>
 
@@ -208,11 +178,17 @@ const Projects = () => {
           >
             {/* Image */}
             <div className="relative aspect-video">
-              <img
-                src={selectedProject.image}
-                alt={selectedProject.title}
-                className="w-full h-full object-cover"
-              />
+              {selectedProject.images.length > 0 ? (
+                <img
+                  src={selectedProject.images[0].image_url}
+                  alt={selectedProject.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-muted flex items-center justify-center">
+                  <span className="text-muted-foreground font-cairo">لا توجد صورة</span>
+                </div>
+              )}
               <button
                 onClick={() => setSelectedProject(null)}
                 className="absolute top-4 left-4 w-10 h-10 rounded-full bg-primary/80 text-white flex items-center justify-center hover:bg-primary transition-colors"
@@ -239,10 +215,12 @@ const Projects = () => {
                   <Calendar className="w-5 h-5 text-secondary" />
                   {selectedProject.year}
                 </span>
-                <span className="flex items-center gap-2">
-                  <Ruler className="w-5 h-5 text-secondary" />
-                  {selectedProject.area}
-                </span>
+                {selectedProject.area && (
+                  <span className="flex items-center gap-2">
+                    <Ruler className="w-5 h-5 text-secondary" />
+                    {selectedProject.area}
+                  </span>
+                )}
               </div>
 
               <p className="text-muted-foreground font-cairo leading-relaxed mb-8">

@@ -1,0 +1,190 @@
+
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import { usePublicForms } from "@/hooks/website/usePublicForms"
+import { Button } from "@/components/ui/button"
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+
+const formSchema = z.object({
+    customer_name: z.string().min(2, {
+        message: "يجب أن يحتوي الاسم على حرفين على الأقل",
+    }),
+    phone: z.string().min(9, {
+        message: "رقم الهاتف غير صالح",
+    }),
+    email: z.string().email({
+        message: "البريد الإلكتروني غير صالح",
+    }).optional().or(z.literal("")),
+    consultation_type: z.string({
+        required_error: "الرجاء اختيار نوع الاستشارة",
+    }),
+    preferred_date: z.string().optional(),
+    preferred_time: z.string().optional(),
+    message: z.string().optional(),
+})
+
+export function ConsultationForm() {
+    const { submitConsultation, submitting } = usePublicForms()
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            customer_name: "",
+            phone: "",
+            email: "",
+            consultation_type: "",
+            preferred_date: "",
+            preferred_time: "",
+            message: "",
+        },
+    })
+
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        const result = await submitConsultation(values)
+        if (result.success) {
+            form.reset()
+        }
+    }
+
+    return (
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 text-right font-cairo">
+                <div className="grid md:grid-cols-2 gap-4">
+                    <FormField
+                        control={form.control}
+                        name="customer_name"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>الاسم الكامل</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="أدخل اسمك" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="phone"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>رقم الهاتف</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="أدخل رقم هاتفك" {...field} dir="ltr" className="text-right" />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+
+                <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>البريد الإلكتروني (اختياري)</FormLabel>
+                            <FormControl>
+                                <Input placeholder="example@domain.com" {...field} dir="ltr" className="text-right" />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="consultation_type"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>نوع الاستشارة</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="اختر نوع الاستشارة" />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    <SelectItem value="استشارة عقارية">استشارة عقارية</SelectItem>
+                                    <SelectItem value="استشارة هندسية">استشارة هندسية</SelectItem>
+                                    <SelectItem value="تقييم عقاري">تقييم عقاري</SelectItem>
+                                    <SelectItem value="إدارة أملاك">إدارة أملاك</SelectItem>
+                                    <SelectItem value="أخرى">أخرى</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <div className="grid md:grid-cols-2 gap-4">
+                    <FormField
+                        control={form.control}
+                        name="preferred_date"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>التاريخ المفضل</FormLabel>
+                                <FormControl>
+                                    <Input type="date" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="preferred_time"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>الوقت المناسب</FormLabel>
+                                <FormControl>
+                                    <Input type="time" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+
+                <FormField
+                    control={form.control}
+                    name="message"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>الموضوع / تفاصيل الاستشارة</FormLabel>
+                            <FormControl>
+                                <Textarea
+                                    placeholder="اكتب تفاصيل استشارتك هنا..."
+                                    className="resize-none min-h-[100px]"
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <Button type="submit" className="w-full" disabled={submitting}>
+                    {submitting ? "جاري الإرسال..." : "طلب الاستشارة"}
+                </Button>
+            </form>
+        </Form>
+    )
+}

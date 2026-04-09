@@ -1,53 +1,11 @@
 import { motion } from "framer-motion";
 import Layout from "@/components/layout/Layout";
-import { Linkedin, Mail, Phone } from "lucide-react";
-
-const teamMembers = [
-  {
-    id: 1,
-    name: "م. نوح سعيد",
-    role: "الرئيس التنفيذي",
-    bio: "خبرة تتجاوز 30 عاماً في قيادة المشاريع العقارية الكبرى في اليمن.",
-    image: "👨‍💼",
-  },
-  {
-    id: 2,
-    name: "م. أحمد سعيد بارشيد",
-    role: "مدير التطوير العقاري",
-    bio: "متخصص في تطوير المشاريع السكنية الفاخرة مع رؤية مستقبلية.",
-    image: "👨‍💼",
-  },
-  {
-    id: 3,
-    name: "م. سعيد الوعل",
-    role: "مدير المشاريع",
-    bio: "قاد أكثر من 50 مشروعاً ناجحاً بالتزام تام بالجودة والمواعيد.",
-    image: "👨‍💻",
-  },
-  {
-    id: 4,
-    name: "م. خالد أحمد",
-    role: "مدير التصميم الداخلي",
-    bio: "مصمم مبدع يجمع بين الأصالة والمعاصرة في كل مشروع.",
-    image: "👨‍🎨",
-  },
-  {
-    id: 5,
-    name: "م. فهد",
-    role: "المدير الهندسي",
-    bio: "مهندس معماري بخبرة 20 عاماً في التصميم والإشراف الهندسي.",
-    image: "👷",
-  },
-  {
-    id: 6,
-    name: "أ. محمد",
-    role: "مدير العلاقات",
-    bio: "خبير في بناء علاقات طويلة الأمد مع العملاء والشركاء.",
-    image: "🤝",
-  },
-];
+import { Linkedin, Mail, Phone, Loader2, AlertCircle } from "lucide-react";
+import { usePublicTeam } from "@/hooks/website/usePublicTeam";
 
 const Team = () => {
+  const { teamMembers, loading, error } = usePublicTeam();
+
   return (
     <Layout>
       {/* Hero Section */}
@@ -81,60 +39,85 @@ const Team = () => {
       {/* Team Grid */}
       <section className="py-24 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teamMembers.map((member, index) => (
-              <motion.div
-                key={member.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="group"
-              >
-                <div className="bg-card rounded-2xl overflow-hidden shadow-soft card-hover">
-                  {/* Avatar */}
-                  <div className="aspect-square bg-gradient-to-br from-secondary/10 to-secondary/5 flex items-center justify-center text-8xl group-hover:scale-105 transition-transform duration-500">
-                    {member.image}
-                  </div>
 
-                  {/* Content */}
-                  <div className="p-6">
-                    <h3 className="text-xl font-tajawal font-bold text-foreground mb-1">
-                      {member.name}
-                    </h3>
-                    <p className="text-secondary font-cairo font-semibold mb-3">
-                      {member.role}
-                    </p>
-                    <p className="text-muted-foreground font-cairo text-sm leading-relaxed mb-4">
-                      {member.bio}
-                    </p>
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+              <Loader2 className="w-10 h-10 animate-spin mb-4 text-secondary" />
+              <p className="font-cairo">جاري تحميل الفريق...</p>
+            </div>
+          ) : error ? (
+            <div className="flex flex-col items-center justify-center py-20 text-destructive">
+              <AlertCircle className="w-10 h-10 mb-4" />
+              <p className="font-cairo text-lg font-semibold">عذراً، حدث خطأ أثناء تحميل بيانات الفريق</p>
+              <p className="font-cairo text-sm opacity-80 mt-2">{error.message || "يرجى المحاولة مرة أخرى"}</p>
+            </div>
+          ) : teamMembers.length === 0 ? (
+            <div className="text-center py-20 text-muted-foreground font-cairo">
+              لا توجد بيانات للفريق حالياً.
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {teamMembers.map((member, index) => (
+                <motion.div
+                  key={member.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="group"
+                >
+                  <div className="bg-card rounded-2xl overflow-hidden shadow-soft card-hover h-full flex flex-col">
+                    {/* Avatar */}
+                    <div className="aspect-square bg-gradient-to-br from-secondary/10 to-secondary/5 flex items-center justify-center text-8xl group-hover:scale-105 transition-transform duration-500 overflow-hidden">
+                      {member.avatar_url ? (
+                        <img
+                          src={member.avatar_url}
+                          alt={member.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span>👨‍💼</span>
+                      )}
+                    </div>
 
-                    {/* Social Links */}
-                    <div className="flex gap-2">
-                      <a
-                        href="#"
-                        className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-secondary hover:text-secondary-foreground transition-colors"
-                      >
-                        <Linkedin className="w-4 h-4" />
-                      </a>
-                      <a
-                        href="#"
-                        className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-secondary hover:text-secondary-foreground transition-colors"
-                      >
-                        <Mail className="w-4 h-4" />
-                      </a>
-                      <a
-                        href="#"
-                        className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-secondary hover:text-secondary-foreground transition-colors"
-                      >
-                        <Phone className="w-4 h-4" />
-                      </a>
+                    {/* Content */}
+                    <div className="p-6 flex-1 flex flex-col">
+                      <h3 className="text-xl font-tajawal font-bold text-foreground mb-1">
+                        {member.name}
+                      </h3>
+                      <p className="text-secondary font-cairo font-semibold mb-3">
+                        {member.role}
+                      </p>
+                      <p className="text-muted-foreground font-cairo text-sm leading-relaxed mb-4 flex-1">
+                        {member.bio || "عضو متميز في فريقنا."}
+                      </p>
+
+                      {/* Social Links */}
+                      <div className="flex gap-2 mt-auto">
+                        {member.linkedin_url ? (
+                          <a
+                            href={member.linkedin_url}
+                            target="_blank" rel="noopener noreferrer"
+                            className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-secondary hover:text-secondary-foreground transition-colors"
+                          >
+                            <Linkedin className="w-4 h-4" />
+                          </a>
+                        ) : null}
+
+                        {/* Always show generic mail contact for now as it's not in DB explicitly per member usually, or add if present */}
+                        <a
+                          href={`mailto:contact@alwael.com`}
+                          className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-secondary hover:text-secondary-foreground transition-colors"
+                        >
+                          <Mail className="w-4 h-4" />
+                        </a>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
