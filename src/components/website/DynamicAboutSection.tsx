@@ -77,6 +77,9 @@ const DynamicAboutSection = () => {
                                     src={displayImage}
                                     alt="تصميم داخلي فاخر"
                                     className="w-full h-[400px] md:h-[500px] object-cover"
+                                    width="1000"
+                                    height="500"
+                                    loading="lazy"
                                 />
                             </div>
 

@@ -95,9 +95,9 @@ const StatsSection = () => {
               </div>
 
               {/* Label */}
-              <div className="text-secondary font-tajawal font-semibold text-lg mb-1">
+              <h3 className="text-secondary font-tajawal font-semibold text-lg mb-1">
                 {stat.label}
-              </div>
+              </h3>
 
               {/* Description */}
               <p className="text-primary-foreground/60 font-cairo text-sm hidden md:block">

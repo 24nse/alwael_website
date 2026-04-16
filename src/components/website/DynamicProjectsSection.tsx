@@ -115,6 +115,9 @@ export function DynamicProjectsSection() {
                                         src={project.images[0].image_url}
                                         alt={project.title}
                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                        loading="lazy"
+                                        width="800"
+                                        height="600"
                                     />
                                 ) : (
                                     <div className="w-full h-full bg-muted flex items-center justify-center">

@@ -125,6 +125,7 @@ const Header = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? "إغلاق القائمة" : "فتح القائمة"}
             className={cn(
               "lg:hidden p-2 rounded-lg transition-colors",
               scrolled

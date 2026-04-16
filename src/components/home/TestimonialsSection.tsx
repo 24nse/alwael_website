@@ -124,6 +124,7 @@ const TestimonialsSection = () => {
               variant="outline"
               size="icon"
               onClick={prevTestimonial}
+              aria-label="الشهادة السابقة"
               className="rounded-full border-border hover:bg-secondary hover:text-secondary-foreground hover:border-secondary"
             >
               <ChevronRight className="w-5 h-5" />
@@ -135,6 +136,7 @@ const TestimonialsSection = () => {
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
+                  aria-label={`الذهاب إلى الشهادة ${index + 1}`}
                   className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${index === currentIndex
                     ? "bg-secondary w-8"
                     : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
@@ -147,6 +149,7 @@ const TestimonialsSection = () => {
               variant="outline"
               size="icon"
               onClick={nextTestimonial}
+              aria-label="الشهادة التالية"
               className="rounded-full border-border hover:bg-secondary hover:text-secondary-foreground hover:border-secondary"
             >
               <ChevronLeft className="w-5 h-5" />

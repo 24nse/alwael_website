@@ -72,6 +72,9 @@ export function TeamSection() {
                                         src={member.image_url}
                                         alt={member.name}
                                         className="w-24 h-24 rounded-full object-cover border-4 border-secondary/20"
+                                        loading="lazy"
+                                        width="96"
+                                        height="96"
                                     />
                                 </div>
                             )}

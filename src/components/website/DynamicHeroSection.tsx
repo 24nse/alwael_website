@@ -56,6 +56,10 @@ const DynamicHeroSection = () => {
                     src={displayImage}
                     alt="مبنى الوعل الفاخر"
                     className="w-full h-full object-cover"
+                    width="1920"
+                    height="1080"
+                    loading="eager"
+                    fetchPriority="high"
                 />
                 <div className="absolute inset-0 hero-overlay" />
             </div>
@@ -79,14 +83,14 @@ const DynamicHeroSection = () => {
                         </span>
                     </motion.div>
 
-                    <motion.div
+                    <motion.h1
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.1 }}
                         className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-tajawal font-bold text-white leading-tight mb-6 text-shadow"
                     >
                         {displayTitle}
-                    </motion.div>
+                    </motion.h1>
 
                     <motion.p
                         initial={{ opacity: 0, y: 30 }}
