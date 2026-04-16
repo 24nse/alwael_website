@@ -34,13 +34,19 @@ const DynamicHeroSection = () => {
         return (
             <section className="relative min-h-screen flex items-center overflow-hidden bg-background">
                 <div className="container mx-auto px-4">
-                    <div className="max-w-3xl space-y-6">
-                        <div className="h-8 w-48 bg-muted animate-pulse rounded-full mb-6"></div>
-                        <div className="h-24 bg-muted animate-pulse rounded-lg mb-6"></div>
-                        <div className="h-20 bg-muted animate-pulse rounded-lg mb-8"></div>
-                        <div className="flex gap-4 mb-12">
-                            <div className="h-14 w-40 bg-muted animate-pulse rounded-md"></div>
-                            <div className="h-14 w-40 bg-muted animate-pulse rounded-md"></div>
+                    <div className="max-w-3xl space-y-8">
+                        <div className="h-10 w-64 bg-muted/20 animate-pulse rounded-full"></div>
+                        <div className="space-y-4">
+                            <div className="h-16 w-full bg-muted/20 animate-pulse rounded-lg"></div>
+                            <div className="h-16 w-3/4 bg-muted/20 animate-pulse rounded-lg"></div>
+                        </div>
+                        <div className="space-y-3">
+                            <div className="h-4 w-full bg-muted/20 animate-pulse rounded"></div>
+                            <div className="h-4 w-5/6 bg-muted/20 animate-pulse rounded"></div>
+                        </div>
+                        <div className="flex gap-4 pt-4">
+                            <div className="h-14 w-44 bg-muted/20 animate-pulse rounded-xl"></div>
+                            <div className="h-14 w-44 bg-muted/20 animate-pulse rounded-xl"></div>
                         </div>
                     </div>
                 </div>
@@ -123,6 +129,7 @@ const DynamicHeroSection = () => {
                             variant="outline"
                             className="font-cairo font-semibold text-base px-8 border-white/30 text-white hover:bg-white/10 hover:border-white/50 backdrop-blur-sm"
                             asChild
+                            aria-label="استعرض مشاريعنا"
                         >
                             <Link to="/projects">
                                 <Play className="ml-2 w-5 h-5" />

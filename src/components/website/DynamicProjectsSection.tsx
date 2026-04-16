@@ -28,11 +28,16 @@ export function DynamicProjectsSection() {
             <section ref={ref} className="py-24 bg-background">
                 <div className="container mx-auto px-4">
                     <div className="animate-pulse">
-                        <div className="h-8 bg-muted rounded w-48 mx-auto mb-4"></div>
-                        <div className="h-4 bg-muted rounded w-64 mx-auto mb-12"></div>
-                        <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-                            {[1, 2, 3, 4].map((i) => (
-                                <div key={i} className="h-96 bg-muted rounded-2xl"></div>
+                        <div className="h-10 bg-muted/30 rounded-full w-32 mx-auto mb-6"></div>
+                        <div className="h-12 bg-muted/30 rounded-lg w-96 mx-auto mb-8"></div>
+                        <div className="h-4 bg-muted/30 rounded w-64 mx-auto mb-16"></div>
+                        <div className="grid md:grid-cols-2 gap-8">
+                            {[1, 2].map((i) => (
+                                <div key={i} className="space-y-4">
+                                    <div className="aspect-[4/3] bg-muted/30 rounded-2xl"></div>
+                                    <div className="h-6 bg-muted/30 rounded w-1/2"></div>
+                                    <div className="h-4 bg-muted/30 rounded w-1/4"></div>
+                                </div>
                             ))}
                         </div>
                     </div>

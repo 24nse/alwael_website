@@ -18,7 +18,7 @@
     --primary-foreground: 45 80% 95%;
     
     /* Secondary - Warm Gold */
-    --secondary: 43 70% 45%;
+    --secondary: 43 70% 41%; /* Darkened for accessibility */
     --secondary-foreground: 217 60% 15%;
     
     /* Accent - Rich Gold */
@@ -39,7 +39,7 @@
     
     /* Muted */
     --muted: 40 20% 94%;
-    --muted-foreground: 217 20% 45%;
+    --muted-foreground: 217 20% 38%; /* Darkened for accessibility (4.5:1 contrast) */
     
     /* Destructive */
     --destructive: 0 84% 60%;

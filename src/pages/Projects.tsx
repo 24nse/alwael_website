@@ -116,6 +116,9 @@ const Projects = () => {
                               src={project.images[0].image_url}
                               alt={project.title}
                               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                              loading="lazy"
+                              width="600"
+                              height="450"
                             />
                           ) : (
                             <div className="w-full h-full bg-muted flex items-center justify-center">
@@ -192,6 +195,7 @@ const Projects = () => {
               <button
                 onClick={() => setSelectedProject(null)}
                 className="absolute top-4 left-4 w-10 h-10 rounded-full bg-primary/80 text-white flex items-center justify-center hover:bg-primary transition-colors"
+                aria-label="إغلاق النافذة"
               >
                 <X className="w-5 h-5" />
               </button>

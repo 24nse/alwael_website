@@ -74,6 +74,9 @@ const Team = () => {
                           src={member.avatar_url}
                           alt={member.name}
                           className="w-full h-full object-cover"
+                          loading="lazy"
+                          width="400"
+                          height="400"
                         />
                       ) : (
                         <span>👨‍💼</span>
@@ -99,6 +102,7 @@ const Team = () => {
                             href={member.linkedin_url}
                             target="_blank" rel="noopener noreferrer"
                             className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-secondary hover:text-secondary-foreground transition-colors"
+                            aria-label="تابعنا على لينكد إن"
                           >
                             <Linkedin className="w-4 h-4" />
                           </a>
@@ -108,6 +112,7 @@ const Team = () => {
                         <a
                           href={`mailto:contact@alwael.com`}
                           className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-secondary hover:text-secondary-foreground transition-colors"
+                          aria-label="تواصل عبر البريد الإلكتروني"
                         >
                           <Mail className="w-4 h-4" />
                         </a>
