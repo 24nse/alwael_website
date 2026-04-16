@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useMemo } from "react";
 import { ArrowLeft, Play, Award, Building, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-building.jpg";
@@ -15,17 +16,32 @@ const DynamicHeroSection = () => {
     const { getSection, loading } = usePublicContent("hero");
     const heroData = getSection("hero");
 
-    const displayTitle = heroData?.title ? (
-        <div dangerouslySetInnerHTML={{ __html: heroData.title.replace('أحلامك', '<span class="text-secondary">أحلامك</span>') }} />
-    ) : (
-        <>
-            نُحَوِّل
-            <span className="text-secondary"> أحلامك </span>
-            إلى
-            <br />
-            واقع معماري فاخر
-        </>
-    );
+    const displayTitle = useMemo(() => {
+        if (!heroData?.title) {
+            return (
+                <>
+                    نُحَوِّل
+                    <span className="text-secondary"> أحلامك </span>
+                    إلى
+                    <br />
+                    واقع معماري فاخر
+                </>
+            );
+        }
+        
+        // Simple safe replacement for highlighting 'أحلامك'
+        const parts = heroData.title.split('أحلامك');
+        if (parts.length > 1) {
+            return (
+                <>
+                    {parts[0]}
+                    <span className="text-secondary">أحلامك</span>
+                    {parts[1]}
+                </>
+            );
+        }
+        return heroData.title;
+    }, [heroData?.title]);
 
     const displayContent = heroData?.content || "شركة الوعل للعقارات والمقاولات، خبرة تمتد لأكثر من 25 عاماً في البناء والتطوير العقاري. نقدم حلولاً متكاملة تجمع بين الجودة والابتكار والالتزام بأعلى المعايير.";
     const displayImage = heroData?.image_url || heroImage;
@@ -66,6 +82,7 @@ const DynamicHeroSection = () => {
                     height="1080"
                     loading="eager"
                     fetchPriority="high"
+                    sizes="(max-width: 768px) 100vw, 1920px"
                 />
                 <div className="absolute inset-0 hero-overlay" />
             </div>

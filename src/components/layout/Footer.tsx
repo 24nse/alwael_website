@@ -58,7 +58,7 @@ const Footer = () => {
                   key={social.label}
                   href={social.href}
                   aria-label={social.label}
-                  className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-all duration-300"
+                  className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-all duration-300 touch-target"
                 >
                   <social.icon className="w-5 h-5" />
                 </a>
@@ -110,34 +110,34 @@ const Footer = () => {
             </h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
                   <MapPin className="w-5 h-5 text-secondary" />
                 </div>
-                <span className="font-cairo text-primary-foreground/80">
+                <span className="font-cairo text-primary-foreground/80 pt-2">
                   ابن سيناء - المكلا، اليمن
                   <br />
                   الشارع العام - بجانب بنك الكريمي
                 </span>
               </li>
               <li className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
                   <Phone className="w-5 h-5 text-secondary" />
                 </div>
                 <a
                   href="tel:+967773795665"
-                  className="font-cairo text-primary-foreground/80 hover:text-secondary transition-colors"
+                  className="font-cairo text-primary-foreground/80 hover:text-secondary transition-colors py-2"
                   dir="ltr"
                 >
                   +967 773 795 665
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
                   <Mail className="w-5 h-5 text-secondary" />
                 </div>
                 <a
                   href="mailto:info@alwael.com"
-                  className="font-cairo text-primary-foreground/80 hover:text-secondary transition-colors"
+                  className="font-cairo text-primary-foreground/80 hover:text-secondary transition-colors py-2"
                 >
                   info@alwael.com
                 </a>

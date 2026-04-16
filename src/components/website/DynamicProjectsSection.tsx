@@ -93,7 +93,7 @@ export function DynamicProjectsSection() {
                         <button
                             key={category}
                             onClick={() => setActiveCategory(category)}
-                            className={`px-6 py-2.5 rounded-full font-cairo text-sm transition-all duration-300 ${activeCategory === category
+                            className={`px-6 py-4 md:py-2.5 rounded-full font-cairo text-sm transition-all duration-300 ${activeCategory === category
                                     ? 'bg-secondary text-secondary-foreground shadow-gold'
                                     : 'bg-muted text-muted-foreground hover:bg-secondary/10 hover:text-secondary'
                                 }`}

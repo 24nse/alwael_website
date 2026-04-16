@@ -1,0 +1,23 @@
+/*
+  # Caching for hashed assets (1 year)
+*/
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*
+  # Caching for static non-hashed assets (1 day)
+*/
+/*.png
+  Cache-Control: public, max-age=86400
+/*.jpg
+  Cache-Control: public, max-age=86400
+/*.svg
+  Cache-Control: public, max-age=86400
+/*.ico
+  Cache-Control: public, max-age=86400
+
+/*
+  # HTML files (no-cache)
+*/
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

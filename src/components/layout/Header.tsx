@@ -127,7 +127,7 @@ const Header = () => {
             onClick={() => setIsOpen(!isOpen)}
             aria-label={isOpen ? "إغلاق القائمة" : "فتح القائمة"}
             className={cn(
-              "lg:hidden p-2 rounded-lg transition-colors",
+              "lg:hidden p-2 rounded-lg transition-colors touch-target",
               scrolled
                 ? "text-foreground hover:bg-muted"
                 : "text-white hover:bg-white/10"
@@ -158,7 +158,7 @@ const Header = () => {
                   <Link
                     to={link.path}
                     className={cn(
-                      "block px-4 py-3 rounded-lg font-cairo transition-all",
+                      "block px-4 py-4 rounded-lg font-cairo transition-all text-lg",
                       location.pathname === link.path
                         ? "bg-secondary text-secondary-foreground font-semibold"
                         : "text-foreground hover:bg-muted"
