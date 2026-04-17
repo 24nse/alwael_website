@@ -23,12 +23,11 @@ import {
 } from "@/components/ui/select"
 
 const formSchema = z.object({
-    customer_name: z.string().min(2, {
-        message: "يجب أن يحتوي الاسم على حرفين على الأقل",
-    }),
-    phone: z.string().min(9, {
-        message: "رقم الهاتف غير صالح",
-    }),
+    customer_name: z.string()
+        .min(3, { message: "يجب أن يحتوي الاسم على 3 أحرف على الأقل" })
+        .regex(/^[\u0621-\u064A\s]+$/, { message: "يجب أن يحتوي الاسم على أحرف عربية فقط" }),
+    phone: z.string()
+        .regex(/^(\+967)?7[0-9]{8}$/, { message: "صيغة رقم الهاتف: +967 7XX XXX XXX" }),
     email: z.string().email({
         message: "البريد الإلكتروني غير صالح",
     }).optional().or(z.literal("")),
