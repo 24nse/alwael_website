@@ -9,7 +9,7 @@ import { usePublicProjects } from "@/hooks/website/usePublicProjects";
 const Projects = () => {
   const { projects, loading, error } = usePublicProjects();
   const [activeCategory, setActiveCategory] = useState("الكل");
-  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [selectedProject, setSelectedProject] = useState<Record<string, unknown> | null>(null);
 
   // Extract unique categories dynamically from DB data
   const categories = useMemo(() => {

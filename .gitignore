@@ -7,6 +7,11 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Environment secrets (NEVER commit)
+.env
+.env.local
+.env.*.local
+
 node_modules
 dist
 dist-ssr
@@ -36,9 +41,7 @@ logs/security/
 
 # Build artifacts
 *.tsbuildinfo
-dist/
-node_modules/
 
-# Temporary SQL
+# Temporary files
 supabase_task_*.sql
 rls_verification_*.png

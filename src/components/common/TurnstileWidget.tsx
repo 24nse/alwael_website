@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 interface TurnstileWidgetProps {
     siteKey: string;
     onVerify: (token: string) => void;
-    onError?: (error: any) => void;
+    onError?: (error: unknown) => void;
     onExpire?: () => void;
     theme?: "light" | "dark" | "auto";
 }
@@ -11,7 +11,7 @@ interface TurnstileWidgetProps {
 declare global {
     interface Window {
         turnstile: {
-            render: (element: string | HTMLElement, options: any) => string;
+            render: (element: string | HTMLElement, options: Record<string, unknown>) => string;
             reset: (widgetId: string) => void;
             remove: (widgetId: string) => void;
         };
