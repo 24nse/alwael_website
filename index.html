@@ -20,6 +20,46 @@
   <meta name="twitter:image" content="https://24nse.github.io/alwael_website/og-image.jpg" />
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
+  <!--
+    SPA GitHub Pages Redirect Restore — Part 2 of spa-github-pages technique
+    Reads the encoded redirect from the 404.html script and restores the original URL
+    using history.replaceState before React Router initializes, so the router sees
+    the correct path and renders the right page without a visible redirect.
+  -->
+  <script>
+    (function () {
+      var redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      if (redirect && redirect !== location.href) {
+        history.replaceState(null, null, redirect);
+      }
+    })();
+  </script>
+  <!-- SPA query-string redirect restore (for the ?p= encoding approach) -->
+  <script>
+    (function () {
+      var l = window.location;
+      if (l.search[1] === 'p') {
+        var decoded = l.search
+          .slice(1)
+          .split('&')
+          .map(function (s) {
+            return s.replace(/~and~/g, '&');
+          });
+
+        // Reconstruct the original URL from the encoded query parameters
+        var path =
+          '/' +
+          decoded[0].slice(2) + // ?p=path
+          (decoded[1] ? '?' + decoded[1].slice(2) : '') + // &q=query
+          (decoded[2] ? '#' + decoded[2].slice(2) : ''); // &h=hash
+
+        // Use replaceState so the browser back button works correctly
+        window.history.replaceState(null, null, '/alwael_website' + path);
+      }
+    })();
+  </script>
+
 </head>
 
 <body>
