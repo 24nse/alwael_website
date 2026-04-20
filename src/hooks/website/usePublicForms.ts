@@ -26,10 +26,27 @@ export function usePublicForms() {
     const [submitting, setSubmitting] = useState(false);
     const { toast } = useToast();
 
-    const submitOrder = async (formData: OrderFormData) => {
+    const validateCaptcha = async (token: string) => {
+        const { data, error } = await supabase.functions.invoke('validate-turnstile', {
+            body: { token }
+        });
+        
+        if (error) throw new Error('فشل التحقق من الكابتشا');
+        if (!data?.success) throw new Error('التحقق من الكابتشا غير صالح');
+        return true;
+    };
+
+    const submitOrder = async (formData: OrderFormData, captchaToken: string) => {
         try {
             setSubmitting(true);
+            
+            // 1. Validate CAPTCHA server-side
+            await validateCaptcha(captchaToken);
 
+            // 2. Generate Idempotency Key
+            const idempotencyKey = crypto.randomUUID();
+
+            // 3. Perform Insert
             const { error } = await supabase
                 .from('orders')
                 .insert([{
@@ -40,7 +57,9 @@ export function usePublicForms() {
                     location: formData.location,
                     budget: formData.budget,
                     message: formData.message,
-                    status: 'new'
+                    status: 'new',
+                    captcha_token: captchaToken,
+                    idempotency_key: idempotencyKey
                 }]);
 
             if (error) throw error;
@@ -55,7 +74,7 @@ export function usePublicForms() {
             const errorMessage = err instanceof Error ? err.message : 'فشل إرسال الطلب';
 
             toast({
-                title: 'خطأ',
+                title: 'خطأ في الإرسال',
                 description: errorMessage,
                 variant: 'destructive',
             });
@@ -66,10 +85,17 @@ export function usePublicForms() {
         }
     };
 
-    const submitConsultation = async (formData: ConsultationFormData) => {
+    const submitConsultation = async (formData: ConsultationFormData, captchaToken: string) => {
         try {
             setSubmitting(true);
+            
+            // 1. Validate CAPTCHA server-side
+            await validateCaptcha(captchaToken);
 
+            // 2. Generate Idempotency Key
+            const idempotencyKey = crypto.randomUUID();
+
+            // 3. Perform Insert
             const { error } = await supabase
                 .from('consultations')
                 .insert([{
@@ -80,7 +106,9 @@ export function usePublicForms() {
                     preferred_date: formData.preferred_date,
                     preferred_time: formData.preferred_time,
                     message: formData.message,
-                    status: 'pending'
+                    status: 'pending',
+                    captcha_token: captchaToken,
+                    idempotency_key: idempotencyKey
                 }]);
 
             if (error) throw error;
@@ -95,7 +123,7 @@ export function usePublicForms() {
             const errorMessage = err instanceof Error ? err.message : 'فشل إرسال طلب الاستشارة';
 
             toast({
-                title: 'خطأ',
+                title: 'خطأ في الإرسال',
                 description: errorMessage,
                 variant: 'destructive',
             });

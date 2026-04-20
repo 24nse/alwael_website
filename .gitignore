@@ -33,3 +33,12 @@ dist-ssr
 .worktrees/
 .security-key
 logs/security/
+
+# Build artifacts
+*.tsbuildinfo
+dist/
+node_modules/
+
+# Temporary SQL
+supabase_task_*.sql
+rls_verification_*.png

@@ -1,4 +1,4 @@
-
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -21,6 +21,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { TurnstileWidget } from "@/components/common/TurnstileWidget"
 
 const formSchema = z.object({
     customer_name: z.string()
@@ -41,6 +42,7 @@ const formSchema = z.object({
 
 export function ConsultationForm() {
     const { submitConsultation, submitting } = usePublicForms()
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -56,9 +58,12 @@ export function ConsultationForm() {
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const result = await submitConsultation(values)
+        if (!captchaToken) return;
+
+        const result = await submitConsultation(values, captchaToken)
         if (result.success) {
             form.reset()
+            setCaptchaToken(null)
         }
     }
 
@@ -180,7 +185,17 @@ export function ConsultationForm() {
                     )}
                 />
 
-                <Button type="submit" className="w-full" disabled={submitting}>
+                <TurnstileWidget 
+                    siteKey="0x4AAAAAAC_rux8Q2-rYWoZL" 
+                    onVerify={(token) => setCaptchaToken(token)}
+                    onExpire={() => setCaptchaToken(null)}
+                />
+
+                <Button 
+                    type="submit" 
+                    className="w-full" 
+                    disabled={submitting || !captchaToken}
+                >
                     {submitting ? "جاري الإرسال..." : "طلب الاستشارة"}
                 </Button>
             </form>

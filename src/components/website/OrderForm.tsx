@@ -1,4 +1,4 @@
-
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -21,6 +21,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { TurnstileWidget } from "@/components/common/TurnstileWidget"
 
 const formSchema = z.object({
     customer_name: z.string()
@@ -43,6 +44,7 @@ const formSchema = z.object({
 
 export function OrderForm() {
     const { submitOrder, submitting } = usePublicForms()
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -58,9 +60,13 @@ export function OrderForm() {
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const result = await submitOrder(values)
+        if (!captchaToken) return;
+        
+        const result = await submitOrder(values, captchaToken)
         if (result.success) {
             form.reset()
+            setCaptchaToken(null)
+            // Reset Turnstile widget if possible, or it will auto-expire
         }
     }
 
@@ -182,7 +188,17 @@ export function OrderForm() {
                     )}
                 />
 
-                <Button type="submit" className="w-full" disabled={submitting}>
+                <TurnstileWidget 
+                    siteKey="0x4AAAAAAC_rux8Q2-rYWoZL" 
+                    onVerify={(token) => setCaptchaToken(token)}
+                    onExpire={() => setCaptchaToken(null)}
+                />
+
+                <Button 
+                    type="submit" 
+                    className="w-full" 
+                    disabled={submitting || !captchaToken}
+                >
                     {submitting ? "جاري الإرسال..." : "إرسال الطلب"}
                 </Button>
             </form>
